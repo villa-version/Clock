@@ -13,15 +13,14 @@ class Clock:
     def __init__(self, scr, pos, r):
         self.screen = scr
         self.x, self.y = pos
-        self.rad = r
+        self.radius = r
         self.create_points()
 
     def create_points(self):
         for i in range(12):
-            angle = 30*i
-            print(angle, math.cos(angle))
-            x = math.cos(angle)*(self.rad-20)
-            y = math.sin(angle)*(self.rad-20)
+            angle = (30*math.pi)/180*i
+            x = math.cos(angle)*(self.radius-20)
+            y = math.sin(angle)*(self.radius-20)
             self.list_pos_points.append((self.x + x, self.y + y))
 
     def update(self):
@@ -33,7 +32,7 @@ class Clock:
         img = pygame.font.SysFont(pygame.font.get_fonts()[0], 35).render(self.current_time, True, (255, 255, 255))
         self.screen.blit(img, (self.x-50, HEIGHT-35))
         # draw circle
-        pygame.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), self.rad)
+        pygame.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), self.radius)
         # draw points
         for x, y in self.list_pos_points:
             pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 10)
