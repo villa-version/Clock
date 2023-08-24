@@ -36,6 +36,19 @@ class Clock:
         # draw points
         for x, y in self.list_pos_points:
             pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 10)
+        # draw hour line
+        hour = int(self.current_time.split(':')[0])
+        minute = int(self.current_time.split(':')[1])
+        second = int(self.current_time.split(':')[2])
+        angle = (hour*360/12-90)+minute*30/60
+        end_x = self.x + math.cos((angle*math.pi)/180)*(self.radius/3)
+        end_y = self.y + math.sin((angle*math.pi)/180)*(self.radius/3)
+        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (end_x, end_y))
+        # draw minute line
+        angle = (minute * 360 / 60 - 90) + second * 30 / 60
+        end_x = self.x + math.cos((angle * math.pi) / 180) * (self.radius / 1.5)
+        end_y = self.y + math.sin((angle * math.pi) / 180) * (self.radius / 1.5)
+        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (end_x, end_y))
 
 
 def main():
