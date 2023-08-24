@@ -14,7 +14,8 @@ def calculate_pos(angle, dist):
 class Clock:
 
     current_time = None
-    list_pos_points = []
+    list_pos_points_hour = []
+    list_pos_points_minute = []
 
     def __init__(self, scr, pos, r):
         self.screen = scr
@@ -25,7 +26,10 @@ class Clock:
     def create_points(self):
         for i in range(12):
             x, y = calculate_pos(30*i, self.radius-20)
-            self.list_pos_points.append((self.x + x, self.y + y))
+            self.list_pos_points_hour.append((self.x + x, self.y + y))
+        for i in range(60):
+            x, y = calculate_pos(6*i, self.radius-20)
+            self.list_pos_points_minute.append((self.x + x, self.y + y))
 
     def update(self):
         self.current_time = str(datetime.datetime.now()).split(' ')[1].split('.')[0]
@@ -38,8 +42,10 @@ class Clock:
         # draw circle
         pygame.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), self.radius)
         # draw points
-        for x, y in self.list_pos_points:
-            pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 10)
+        for x, y in self.list_pos_points_hour:
+            pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 5)
+        for x, y in self.list_pos_points_minute:
+            pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 1)
         # draw hour line
         hour = int(self.current_time.split(':')[0])
         minute = int(self.current_time.split(':')[1])
