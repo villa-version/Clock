@@ -5,6 +5,12 @@ WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
+def calculate_pos(angle, dist):
+    x = math.cos((angle * math.pi) / 180) * dist
+    y = math.sin((angle * math.pi) / 180) * dist
+    return x, y
+
+
 class Clock:
 
     current_time = None
@@ -18,9 +24,7 @@ class Clock:
 
     def create_points(self):
         for i in range(12):
-            angle = (30*math.pi)/180*i
-            x = math.cos(angle)*(self.radius-20)
-            y = math.sin(angle)*(self.radius-20)
+            x, y = calculate_pos(30*i, self.radius-20)
             self.list_pos_points.append((self.x + x, self.y + y))
 
     def update(self):
@@ -40,20 +44,17 @@ class Clock:
         hour = int(self.current_time.split(':')[0])
         minute = int(self.current_time.split(':')[1])
         second = int(self.current_time.split(':')[2])
-        angle = (hour*360/12-90)+minute*30/60
-        end_x = self.x + math.cos((angle*math.pi)/180)*(self.radius/3)
-        end_y = self.y + math.sin((angle*math.pi)/180)*(self.radius/3)
-        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (end_x, end_y))
+        angle = (hour * 360 / 12 - 90) + minute * 30 / 60
+        end_x, end_y = calculate_pos(angle, self.radius / 2)
+        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (self.x + end_x, self.y + end_y))
         # draw minute line
-        angle = (minute * 360 / 60 - 90)
-        end_x = self.x + math.cos((angle * math.pi) / 180) * (self.radius / 1.5)
-        end_y = self.y + math.sin((angle * math.pi) / 180) * (self.radius / 1.5)
-        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (end_x, end_y))
+        angle = (minute * 360 / 60 - 90) + second / 30
+        end_x, end_y = calculate_pos(angle, self.radius / 1.5)
+        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (self.x + end_x, self.y + end_y))
         # draw second line
         angle = (second * 360 / 60 - 90)
-        end_x = self.x + math.cos((angle * math.pi) / 180) * (self.radius / 1.2)
-        end_y = self.y + math.sin((angle * math.pi) / 180) * (self.radius / 1.2)
-        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (end_x, end_y))
+        end_x, end_y = calculate_pos(angle, self.radius / 1.2)
+        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (self.x + end_x, self.y + end_y))
 
 
 def main():
