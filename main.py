@@ -43,6 +43,8 @@ class Clock:
         pygame.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), self.radius)
         # draw points
         for x, y in self.list_pos_points_hour:
+            img = pygame.font.SysFont(pygame.font.get_fonts()[0], 24).render(str(self.list_pos_points_hour.index((x, y))), True, (255, 255, 255))
+            self.screen.blit(img, (x, y-50))
             pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 5)
         for x, y in self.list_pos_points_minute:
             pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 1)
