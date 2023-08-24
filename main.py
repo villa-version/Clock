@@ -16,6 +16,7 @@ class Clock:
     current_time = None
     list_pos_points_hour = []
     list_pos_points_minute = []
+    list_pos_numbers = []
 
     def __init__(self, scr, pos, r):
         self.screen = scr
@@ -25,10 +26,12 @@ class Clock:
 
     def create_points(self):
         for i in range(12):
-            x, y = calculate_pos(30*i, self.radius-20)
+            x, y = calculate_pos(30 * i - 90, self.radius - 20)
             self.list_pos_points_hour.append((self.x + x, self.y + y))
+            x, y = calculate_pos(30 * i - 90, self.radius + 15)
+            self.list_pos_numbers.append((self.x + x - 5, self.y + y - 15))
         for i in range(60):
-            x, y = calculate_pos(6*i, self.radius-20)
+            x, y = calculate_pos(6 * i - 90, self.radius - 20)
             self.list_pos_points_minute.append((self.x + x, self.y + y))
 
     def update(self):
@@ -38,16 +41,19 @@ class Clock:
     def draw(self):
         # draw clock face
         img = pygame.font.SysFont(pygame.font.get_fonts()[0], 35).render(self.current_time, True, (255, 255, 255))
-        self.screen.blit(img, (self.x-50, HEIGHT-35))
+        self.screen.blit(img, (0, HEIGHT-35))
         # draw circle
         pygame.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), self.radius)
         # draw points
         for x, y in self.list_pos_points_hour:
-            img = pygame.font.SysFont(pygame.font.get_fonts()[0], 24).render(str(self.list_pos_points_hour.index((x, y))), True, (255, 255, 255))
-            self.screen.blit(img, (x, y-50))
             pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 5)
         for x, y in self.list_pos_points_minute:
             pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 1)
+        # draw numbers
+        for x, y in self.list_pos_numbers:
+            img = pygame.font.SysFont(pygame.font.get_fonts()[0], 24).render(
+                str(self.list_pos_numbers.index((x, y))), True, (255, 255, 255))
+            self.screen.blit(img, (x, y))
         # draw hour line
         hour = int(self.current_time.split(':')[0])
         minute = int(self.current_time.split(':')[1])
