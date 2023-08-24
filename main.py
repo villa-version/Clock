@@ -35,13 +35,13 @@ class Clock:
             self.list_pos_points_minute.append((self.x + x, self.y + y))
 
     def update(self):
-        self.current_time = str(datetime.datetime.now()).split(' ')[1].split('.')[0]
+        self.current_time = datetime.datetime.now()
         self.draw()
 
     def draw(self):
         # draw clock face
-        img = pygame.font.SysFont(pygame.font.get_fonts()[0], 35).render(self.current_time, True, (255, 255, 255))
-        self.screen.blit(img, (0, HEIGHT-35))
+        #img = pygame.font.SysFont(pygame.font.get_fonts()[0], 35).render(self.current_time, True, (255, 255, 255))
+        #self.screen.blit(img, (0, HEIGHT-35))
         # draw circle
         pygame.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), self.radius)
         # draw points
@@ -55,9 +55,9 @@ class Clock:
                 str(self.list_pos_numbers.index((x, y))), True, (255, 255, 255))
             self.screen.blit(img, (x, y))
         # draw hour line
-        hour = int(self.current_time.split(':')[0])
-        minute = int(self.current_time.split(':')[1])
-        second = int(self.current_time.split(':')[2])
+        hour = self.current_time.hour
+        minute = self.current_time.minute
+        second = self.current_time.second
         angle = (hour * 360 / 12 - 90) + minute * 30 / 60
         end_x, end_y = calculate_pos(angle, self.radius / 2)
         pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (self.x + end_x, self.y + end_y))
