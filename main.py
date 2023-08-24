@@ -40,8 +40,8 @@ class Clock:
 
     def draw(self):
         # draw clock face
-        #img = pygame.font.SysFont(pygame.font.get_fonts()[0], 35).render(self.current_time, True, (255, 255, 255))
-        #self.screen.blit(img, (0, HEIGHT-35))
+        img = pygame.font.SysFont(pygame.font.get_fonts()[0], 35).render(f'{self.current_time:%H:%M:%S}', True, (255, 255, 255))
+        self.screen.blit(img, (0, HEIGHT-35))
         # draw circle
         pygame.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), self.radius)
         # draw points
