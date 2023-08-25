@@ -62,9 +62,9 @@ class Clock:
         end_x, end_y = calculate_pos(angle, self.radius / 2)
         pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (self.x + end_x, self.y + end_y), 5)
         # draw minute line
-        angle = (minute * 360 / 60 - 90) + second / 30
+        angle = (minute * 360 / 60 - 90) + second * 6 / 60
         end_x, end_y = calculate_pos(angle, self.radius / 1.5)
-        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (self.x + end_x, self.y + end_y), 2  )
+        pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (self.x + end_x, self.y + end_y), 2)
         # draw second line
         angle = (second * 360 / 60 - 90)
         end_x, end_y = calculate_pos(angle, self.radius / 1.2)
