@@ -1,7 +1,7 @@
 import datetime, pygame, math
 
 
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 500, 500
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
@@ -14,8 +14,7 @@ def calculate_pos(angle, dist):
 class Clock:
 
     current_time = None
-    list_pos_points_hour = []
-    list_pos_points_minute = []
+    list_pos_points = []
     list_pos_numbers = []
 
     def __init__(self, scr, pos, r):
@@ -25,14 +24,15 @@ class Clock:
         self.create_points()
 
     def create_points(self):
-        for i in range(12):
-            x, y = calculate_pos(30 * i - 90, self.radius - 20)
-            self.list_pos_points_hour.append((self.x + x, self.y + y))
-            x, y = calculate_pos(30 * i - 90, self.radius + 15)
-            self.list_pos_numbers.append((self.x + x - 5, self.y + y - 15))
         for i in range(60):
-            x, y = calculate_pos(6 * i - 90, self.radius - 20)
-            self.list_pos_points_minute.append((self.x + x, self.y + y))
+            if i % 5 == 0:
+                x, y = calculate_pos(30 * i//5 - 90, self.radius - 20)
+                self.list_pos_points.append({'number': i//5, 'pos': (self.x + x, self.y + y), 'is_hour': True})
+                x, y = calculate_pos(30 * i//5 - 90, self.radius + 15)
+                self.list_pos_numbers.append({'number': i//5 if i//5 != 0 else 12, 'pos': (self.x + x - 5, self.y + y - 15)})
+            else:
+                x, y = calculate_pos(6 * i - 90, self.radius - 20)
+                self.list_pos_points.append({'number': i, 'pos': (self.x + x, self.y + y), 'is_hour': False})
 
     def update(self):
         self.current_time = datetime.datetime.now()
@@ -45,19 +45,14 @@ class Clock:
         # draw circle
         pygame.draw.circle(self.screen, (255, 255, 255), (self.x, self.y), self.radius)
         # draw points
-        for x, y in self.list_pos_points_hour:
-            pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 5)
-        for x, y in self.list_pos_points_minute:
-            pygame.draw.circle(self.screen, (0, 0, 0), (x, y), 1)
+        for item in self.list_pos_points:
+            pygame.draw.circle(self.screen, (0, 0, 0), (item['pos'][0], item['pos'][1]), 5 if item['is_hour'] else 1)
         # draw numbers
-        for x, y in self.list_pos_numbers:
-            img = pygame.font.SysFont(pygame.font.get_fonts()[0], 24).render(
-                str(self.list_pos_numbers.index((x, y))), True, (255, 255, 255))
-            self.screen.blit(img, (x, y))
+        for item in self.list_pos_numbers:
+            img = pygame.font.SysFont(pygame.font.get_fonts()[0], 24).render(str(item['number']), True, (255, 255, 255))
+            self.screen.blit(img, (item['pos'][0], item['pos'][1]))
         # draw hour line
-        hour = self.current_time.hour
-        minute = self.current_time.minute
-        second = self.current_time.second
+        hour, minute, second = self.current_time.hour, self.current_time.minute, self.current_time.second
         angle = (hour * 360 / 12 - 90) + minute * 30 / 60
         end_x, end_y = calculate_pos(angle, self.radius / 2)
         pygame.draw.line(self.screen, (0, 0, 0), (self.x, self.y), (self.x + end_x, self.y + end_y), 5)
